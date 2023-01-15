@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "pyxdg2"
+version = "0.1.0"
+description = "A reimplementation of PyXDG in modern Python"
+authors = ["Alex Lowe <alex@lowe.dev>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+ruff = "^0.0.222"
+tox = "^4.2.0"
+mypy = "^0.991"
+black = "^22.12"
+pyright = "^1.1"
+pre-commit = "^2.21"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+# Enables all relevant ruff supported rules as of 2023-01-15
+# https://github.com/charliermarsh/ruff#supported-rules
+select = [
+    "F", "E", "W", "C90", "I", "D", "UP", "N", "YTT", "ANN", "S",  "BLE", "FBT",
+    "B", "A", "C4", "T10", "EM", "ISC", "ICN", "T20", "PT", "Q", "RET", "SIM",
+    "TID", "ARG", "DTZ", "ERA", "PGH", "PLC", "PLE", "PLR", "PLW", "PIE", "RUF",
+]
+target-version = "py38"  # Target the lowest required version of Python
+ignore = [
+    # PyDocStyle checks can conflict - disable the ones we don't want.
+    "D203", "D400",
+]

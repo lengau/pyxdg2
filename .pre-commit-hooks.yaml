@@ -1,0 +1,7 @@
+# Additional pre-commit hooks not currently otherwise available.
+- id: pyright
+  name: pyright
+  description: "PyRight - Type checking"
+  entry: pyright
+  language: python
+  types_or: [python, pyi]
