@@ -26,7 +26,7 @@ jobs:
       - name: Setup test suite
         run: |
           tox run -e poetry-export
-          tox r -vv --notest
+          tox run-parallel --parallel-no-spinner -vv --notest
       - name: Run test suite
         run: tox r --skip-pkg-install
         env:
