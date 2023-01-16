@@ -121,7 +121,10 @@ class TestEnvVarPaths:
 
     @pytest.mark.parametrize("control", environment_specs)
     def test_get_vars(self, control):
-        with fake_environ(control) as (mock_env, _):
+        patch_home = mock.patch(
+            "pathlib.Path.home", return_value=pathlib.Path(control["HOME"])
+        )
+        with fake_environ(control) as (mock_env, _), patch_home:
             importlib.reload(basedir)
 
         check.equal(basedir.HOME.as_posix(), control["HOME"])
@@ -135,9 +138,11 @@ class TestEnvVarPaths:
 
     @pytest.mark.parametrize("home_path", ["/"])
     def test_vars_unset(self, home_path):
-        with fake_environ({"HOME": home_path}), mock.patch(
-            "os.getuid", return_value=1000
-        ):
+        patch_getuid = mock.patch("os.getuid", return_value=1000)
+        patch_home = mock.patch(
+            "pathlib.Path.home", return_value=pathlib.Path(home_path)
+        )
+        with fake_environ({"HOME": home_path}), patch_getuid, patch_home:
             importlib.reload(basedir)
 
         check.equal(basedir.HOME.as_posix(), home_path)
@@ -192,7 +197,7 @@ class TestEnsureResource:
                 basedir.ensure_resource(temp_path, "cant_touch_dis/no")
 
     def test_fails_when_not_relative(self):
-        with pytest.raises(ValueError, match=r"'/' does not start with '/home'"):
+        with pytest.raises(ValueError, match=r"'/'.*'/home'"):
             basedir.ensure_resource(pathlib.Path("/home"), "/")
 
 
