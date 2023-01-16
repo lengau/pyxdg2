@@ -31,3 +31,6 @@ jobs:
         run: tox r --skip-pkg-install
         env:
           PYTEST_ADDOPTS: "-vv --durations=10"
+      - name: Lint with tox
+        if: ${{ always() }}
+        run: tox run -m ci-static
