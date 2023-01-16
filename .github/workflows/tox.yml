@@ -1,6 +1,10 @@
 name: Check with Tox
 on:
   push:
+    branches:
+      - 'main'
+      - 'releases/**'
+    tags:
   pull_request:
   schedule:
     - cron: "0 8 * * *"
