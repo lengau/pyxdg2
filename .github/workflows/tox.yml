@@ -1,6 +1,10 @@
 name: Check with Tox
 on:
   push:
+    branches:
+      - 'main'
+      - 'releases/**'
+    tags:
   pull_request:
   schedule:
     - cron: "0 8 * * *"
@@ -31,3 +35,6 @@ jobs:
         run: tox r --skip-pkg-install
         env:
           PYTEST_ADDOPTS: "-vv --durations=10"
+      - name: Lint with tox
+        if: ${{ always() }}
+        run: tox run -m ci-static
