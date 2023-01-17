@@ -14,9 +14,6 @@ jobs:
     name: Run tests with tox
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          env
-          exit 1
       - name: Setup python versions
         uses: actions/setup-python@v4
         with:
