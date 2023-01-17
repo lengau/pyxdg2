@@ -19,17 +19,18 @@ jobs:
           mkdir -p $TMPDIR
           echo TMPDIR=$TMPDIR >> $GITHUB_ENV
           sudo mount -t tmpfs -o size=1024M,uid=$UID,gid=$(id -g),mode=700,inode64 none $TMPDIR
+      - uses: actions/checkout@v3
       - name: Setup python versions
         uses: actions/setup-python@v4
         with:
           cache: 'pip'
+          cache-dependency-path: 'requirements-dev.txt'
           python-version: |
             3.8
             3.9
             3.10
             3.11
             pypy3.9
-      - uses: actions/checkout@v3
       - name: Install Tox
         run: python -m pip install tox-gh tox
       - name: Setup test suite
