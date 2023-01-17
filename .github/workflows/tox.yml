@@ -14,9 +14,15 @@ jobs:
     name: Run tests with tox
     runs-on: ubuntu-latest
     steps:
+      - run: |
+          export TMPDIR="${RUNNER_TEMP}/tmp"
+          mkdir -p $TMPDIR
+          echo TMPDIR=$TMPDIR >> $GITHUB_ENV
+          sudo mount -t tmpfs -o size=1024M,uid=$UID,gid=$(id -g),mode=700,inode64 none $TMPDIR
       - name: Setup python versions
         uses: actions/setup-python@v4
         with:
+          cache: 'pip'
           python-version: |
             3.8
             3.9
@@ -24,13 +30,12 @@ jobs:
             3.11
             pypy3.9
       - uses: actions/checkout@v3
-      - name: Install dependencies
-        run: |
-          python -m pip install tox-gh tox
+      - name: Install Tox
+        run: python -m pip install tox-gh tox
       - name: Setup test suite
         run: |
-          tox run -e poetry-export
-          tox run-parallel --parallel-no-spinner -vv --notest
+          tox run --workdir $TMPDIR -e poetry-export
+          tox run-parallel --workdir $TMPDIR --parallel-no-spinner -vv --notest
       - name: Run test suite
         run: tox r --skip-pkg-install
         env:
