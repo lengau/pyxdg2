@@ -8,14 +8,15 @@ authors = ["Alex Lowe <alex@lowe.dev>"]
 python = "^3.8"
 
 [tool.poetry.dev-dependencies]
-ruff = "^0.0.222"
-tox = "^4.3.0"
+ruff = "^0.0.223"
+tox = "^4.3.2"
 mypy = "^0.991"
 black = "^22.12"
 pyright = "^1.1"
 pre-commit = "^2.21"
 pytest = "^7.2.1"
 pytest-check = "^2.1.2"
+pytest-cov = {version = "^4.0.0", extras = ["toml"]}
 pytest-mock = "^3.10"
 hypothesis = "^6.62"
 
@@ -45,3 +46,26 @@ ignore = [
     "S101",  # Tests do assert.
 
 ]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+xfail_strict = true
+addopts = [
+    "--cov",
+]
+
+[tool.coverage.run]
+source = ["pyxdg2"]
+branch = true
+
+[tool.coverage.report]
+skip_empty = true
+fail_under = 80
+
+[tool.pyright]
+include = ["pyxdg2", "tests"]
+#strict = ["pyxdg2"]
+venv = "py311"
+pythonVersion = "3.8"
+pythonPlatform = "Linux"
